@@ -1,4 +1,9 @@
 
+import comparator.StudentComparator;
+import comparator.UniversityComparator;
+import enam.StudentType;
+import enam.UniversityType;
+import model.ComparatorUtil;
 import model.Student;
 import model.University;
 import xlsreader.XlsReader;
@@ -11,14 +16,18 @@ public class Boot {
 
         List<University> universities =
                 XlsReader.readXlsUniversities("src/main/resources/universityInfo.xlsx");
-        for(University university : universities) {
+        UniversityComparator universityComparator= ComparatorUtil.getUniversityComparator(UniversityType.YEAR_OF_FOUNDATION);
+        universities.stream().sorted(universityComparator).forEach(System.out::println);
+        /*for(University university : universities) {
             System.out.println(university);
-        }
+        }*/
 
         List<Student> students =
                 XlsReader.readXlsStudents("src/main/resources/universityInfo.xlsx");
-        for(Student student : students) {
+        StudentComparator studentComparator=ComparatorUtil.getStudentComparator(StudentType.AVG_EXAM_SCORE);
+        students.stream().sorted(studentComparator).forEach(System.out::println);
+        /*for(Student student : students) {
             System.out.println(student);
-        }
+        }*/
     }
 }
