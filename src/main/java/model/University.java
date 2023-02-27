@@ -1,12 +1,18 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
 import enam.StudyProfile;
 
 public class University {
+    @SerializedName("universityId")
     private String id;
+    @SerializedName("universityName")
     private String fullName;
+    @SerializedName("shortName")
     private String shortName;
+    @SerializedName("foundation")
     private int yearOfFoundation;
+    @SerializedName("profile")
     private StudyProfile mainProfile;
 
     public University(String id, String fullName, String shortName, int yearOfFoundation, StudyProfile mainProfile) {
