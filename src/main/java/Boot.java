@@ -3,11 +3,9 @@ import comparator.StudentComparator;
 import comparator.UniversityComparator;
 import enam.StudentType;
 import enam.UniversityType;
-import model.ComparatorUtil;
-import model.JsonUtil;
-import model.Student;
-import model.University;
+import model.*;
 import xlsreader.XlsReader;
+import xlsreader.XlsWriter;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,5 +50,8 @@ public class Boot {
         });
         List<Student> studentsFromJson = JsonUtil.jsonToStudentList(studentsJson);
         System.out.println("Результат сравнения: "+ (students.size() == studentsFromJson.size()));
+
+        List<Statistics> statisticsList = StatisticsUtil.createStatistics(students, universities);
+        XlsWriter.writeXlsStatistics(statisticsList, "src/main/resources/Statistics.xlsx");
     }
 }
