@@ -4,10 +4,13 @@ import comparator.UniversityComparator;
 import enam.StudentType;
 import enam.UniversityType;
 import model.*;
+import xlsreader.JsonWriter;
 import xlsreader.XlsReader;
 import xlsreader.XlsWriter;
+import xlsreader.XmlWriter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -18,17 +21,13 @@ public class Boot {
     private static final Logger logger = Logger.getLogger(Boot.class.getName());
 
     public static void main(String[] args) throws IOException {
-
         try {
             LogManager.getLogManager().readConfiguration(
                     Boot.class.getResourceAsStream("/logging.properties"));
         } catch (IOException e) {
             System.err.println("Could not setup logger configuration: " + e.toString());
         }
-
         logger.log(Level.INFO, "Application started, Logger configured");
-
-
         List<University> universities =
                 XlsReader.readXlsUniversities("src/main/resources/universityInfo.xlsx");
         UniversityComparator universityComparator= ComparatorUtil.getUniversityComparator(UniversityType.YEAR_OF_FOUNDATION);
@@ -56,7 +55,7 @@ public class Boot {
             System.out.println(student);
         }*/
         students.sort(studentComparator);
-        String studentsJson = JsonUtil.studentListToJson(students);
+        //String studentsJson = JsonUtil.studentListToJson(students);
        /* System.out.println(studentsJson);
         students.forEach(student -> {
             String studentJson = JsonUtil.studentToJson(student);
@@ -69,6 +68,14 @@ public class Boot {
 
         List<Statistics> statisticsList = StatisticsUtil.createStatistics(students, universities);
         XlsWriter.writeXlsStatistics(statisticsList, "src/main/resources/Statistics.xlsx");
+        FullInfo fullInfo = new FullInfo()
+                .setStudentList(students)
+                .setUniversityList(universities)
+                .setStatisticsList(statisticsList)
+                .setProcessDate(new Date());
+
+        XmlWriter.generateXmlReq(fullInfo);
+        JsonWriter.writeJsonReq(fullInfo);
         logger.log(Level.INFO, "Application finished");
     }
 }
